@@ -42,7 +42,16 @@ public class AdminServicesController {
         ResponseDTO responseDTO = adminService.getStudentBySortingAndPagination(field,order,pageSize,offset);
         return new ResponseEntity(responseDTO,responseDTO.getStatus());
     }
+    @GetMapping("/getStudentBasic/{detail}")
+    public ResponseEntity getStudentByDetail(@PathVariable String detail){
+        System.out.println(detail);
+        ResponseDTO responseDTO = adminService.getStudentByDetail(detail);
+        return new ResponseEntity(responseDTO,responseDTO.getStatus());
+    }
 
-
-
+    @GetMapping("/getStudentByID/{stdID}")
+    public ResponseEntity getStudentByID(@PathVariable String stdID){
+        ResponseDTO responseDTO = adminService.getStudentByID(stdID);
+        return new ResponseEntity(responseDTO,responseDTO.getStatus());
+    }
 }

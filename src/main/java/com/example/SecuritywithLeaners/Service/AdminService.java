@@ -146,6 +146,49 @@ public class AdminService {
 
         return responseDTO;
     }
+    public ResponseDTO getStudentByDetail(String detail) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            List<Student> studentList = studentRepo.findByDetail(detail);
+            List<StudentBasicDTO> studentBasicDTOList = studentList.stream().map(student -> modelMapper.map(student, StudentBasicDTO.class)).toList();
+            responseDTO.setRecordCount(studentList.size());
+            responseDTO.setCode(varList.RSP_SUCCES);
+            responseDTO.setMessage("Success");
+            responseDTO.setStatus(HttpStatus.ACCEPTED);
+            responseDTO.setContent(studentBasicDTOList);
+        } catch (Exception e) {
+            responseDTO.setCode(varList.RSP_ERROR);
+            responseDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.setMessage("An error occurred: " + e.getMessage());
+            responseDTO.setContent(null);
+        }
+        return responseDTO;
+    }
+
+    public ResponseDTO getStudentByID(String stdID) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            Optional<Student> student = studentRepo.findById(stdID);
+            if (student.isPresent()) {
+                StudentDTO studentDTO = modelMapper.map(student.get(), StudentDTO.class);
+                responseDTO.setCode(varList.RSP_SUCCES);
+                responseDTO.setMessage("Success");
+                responseDTO.setStatus(HttpStatus.ACCEPTED);
+                responseDTO.setContent(studentDTO);
+            } else {
+                responseDTO.setCode(varList.RSP_NO_DATA_FOUND);
+                responseDTO.setMessage("Student not found");
+                responseDTO.setStatus(HttpStatus.NOT_FOUND);
+                responseDTO.setContent(null);
+            }
+        } catch (Exception e) {
+            responseDTO.setCode(varList.RSP_ERROR);
+            responseDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.setMessage("An error occurred: " + e.getMessage());
+            responseDTO.setContent(null);
+        }
+        return responseDTO;
+    }
 
 
 
