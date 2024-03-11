@@ -5,6 +5,7 @@ import com.example.SecuritywithLeaners.DTO.StudentBasicDTO;
 import com.example.SecuritywithLeaners.DTO.StudentDTO;
 import com.example.SecuritywithLeaners.Entity.Student;
 import com.example.SecuritywithLeaners.Repo.StudentRepo;
+import com.example.SecuritywithLeaners.Util.CalculateAge;
 import com.example.SecuritywithLeaners.Util.IDgenerator;
 import com.example.SecuritywithLeaners.Util.varList;
 import jakarta.transaction.Transactional;
@@ -33,6 +34,9 @@ public class AdminService {
     StudentRepo studentRepo;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private CalculateAge calculateAge;
 
 
     private StudentDTO studentDTO;
@@ -127,7 +131,12 @@ public class AdminService {
 
         try {
             Page<Student> studentDataPage = studentRepo.findAll(PageRequest.of(offset, pageSize, Sort.by(Sort.Direction.valueOf(order), field)));
-            List<StudentDTO> studentDTOList = studentDataPage.stream().map(student -> modelMapper.map(student, StudentDTO.class)).toList();
+            List<StudentDTO> studentDTOList = studentDataPage.stream().map(student -> {//use Stream to convert the list of student to list of studentDTO
+                StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
+                int age = calculateAge.CalculateAgeINT(student.getDateOfBirth().toString());
+                studentDTO.setAge(age);
+                return studentDTO;
+            }).toList();
             log.info("Student data page: {}", studentDataPage);
             responseDTO.setContent(studentDTOList);
             responseDTO.setRecordCount(studentDataPage.getSize());
@@ -171,6 +180,9 @@ public class AdminService {
             Optional<Student> student = studentRepo.findById(stdID);
             if (student.isPresent()) {
                 StudentDTO studentDTO = modelMapper.map(student.get(), StudentDTO.class);
+                int age = calculateAge.CalculateAgeINT(student.get().getDateOfBirth().toString());
+                studentDTO.setAge(age);
+                System.out.println(age);
                 responseDTO.setCode(varList.RSP_SUCCES);
                 responseDTO.setMessage("Success");
                 responseDTO.setStatus(HttpStatus.ACCEPTED);

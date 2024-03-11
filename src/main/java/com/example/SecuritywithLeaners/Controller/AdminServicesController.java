@@ -3,8 +3,11 @@ package com.example.SecuritywithLeaners.Controller;
 
 import com.example.SecuritywithLeaners.DTO.ResponseDTO;
 import com.example.SecuritywithLeaners.DTO.StudentDTO;
+import com.example.SecuritywithLeaners.DTO.TrailPermitDTO;
 import com.example.SecuritywithLeaners.Entity.Student;
+import com.example.SecuritywithLeaners.Entity.TrialPermit;
 import com.example.SecuritywithLeaners.Service.AdminService;
+import com.example.SecuritywithLeaners.Service.TrialPermitService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,8 @@ public class AdminServicesController {
 
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private TrialPermitService trialPermitService;
 
     @PostMapping("/registerStudent")
     public ResponseEntity registerStudent(@RequestBody Student studentDTO){
@@ -53,5 +58,12 @@ public class AdminServicesController {
     public ResponseEntity getStudentByID(@PathVariable String stdID){
         ResponseDTO responseDTO = adminService.getStudentByID(stdID);
         return new ResponseEntity(responseDTO,responseDTO.getStatus());
+    }
+    @PostMapping("/SaveTrialPermit")
+    public ResponseEntity saveTrialPermit(@RequestBody TrailPermitDTO TrialPermitDTO){
+        System.out.println("Hi..................."+TrialPermitDTO);
+        ResponseDTO responseDTO = trialPermitService.SaveTrailPermit(TrialPermitDTO);
+        return new ResponseEntity(responseDTO,responseDTO.getStatus());
+
     }
 }
