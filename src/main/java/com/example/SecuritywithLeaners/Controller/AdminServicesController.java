@@ -66,4 +66,9 @@ public class AdminServicesController {
         return new ResponseEntity(responseDTO,responseDTO.getStatus());
 
     }
+    @GetMapping("/getTrialPermit/{stdID}")
+    public ResponseEntity getTrialPermit(@PathVariable String stdID){
+        ResponseDTO responseDTO = trialPermitService.getTrialPermit(stdID);
+        return new ResponseEntity(responseDTO,responseDTO.getStatus());
+    }
 }

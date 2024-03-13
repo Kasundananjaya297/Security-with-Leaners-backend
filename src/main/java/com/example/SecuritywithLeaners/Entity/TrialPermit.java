@@ -6,12 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "trailPermit")
+@Table(name = "trialPermit")
 public class TrialPermit {
     @Id
     private String serialNo;
@@ -23,7 +24,7 @@ public class TrialPermit {
     private boolean a1M;
     private boolean a1A;
     private boolean aM;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "stdID_fk")
     private Student stdID;
 }
